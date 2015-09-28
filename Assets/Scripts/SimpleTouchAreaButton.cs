@@ -25,7 +25,6 @@ public class SimpleTouchAreaButton : MonoBehaviour, IPointerDownHandler, IPointe
 		if (data.pointerId == pointerID) {
 			canFire = false;
 			touched = false;
-			Debug.Log (Input.touchCount);
 		}
 	}
 	

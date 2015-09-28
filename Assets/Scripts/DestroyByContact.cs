@@ -8,10 +8,10 @@ public class DestroyByContact : MonoBehaviour {
 	public int scoreValue;
 	private GameController gameController;
 
-	private Transform transform;
+	private Transform trans;
 
 	void Start () {
-		transform = GetComponent<Transform>();
+		trans = GetComponent<Transform>();
 
 		GameObject gameControllerObject = GameObject.FindWithTag ("GameController");
 		if (gameControllerObject != null) {
@@ -24,14 +24,22 @@ public class DestroyByContact : MonoBehaviour {
 	void OnTriggerEnter(Collider other) 
 	{
 		if (other.tag != "Boundary"){
-			Instantiate(explosion, transform.position, transform.rotation);
+			Instantiate(explosion, trans.position, trans.rotation);
 
 			if (other.tag == "Player"){
-				Instantiate(playerExplosion, other.transform.position, other.transform.rotation);
-				gameController.GameOver();
+				PlayerController player = other.gameObject.GetComponent <PlayerController> ();
+				player.Damage(30);
+				gameController.UpdateArmor();
+				if (player.stats.armor == 0){
+					Instantiate(playerExplosion, other.transform.position, other.transform.rotation);
+					Destroy(other.gameObject);
+					gameController.GameOver();
+				}
+			} else {
+				Destroy(other.gameObject);
 			}
 			gameController.AddScore(scoreValue);
-			Destroy(other.gameObject);
+
 			Destroy(gameObject);
 		}
 	}

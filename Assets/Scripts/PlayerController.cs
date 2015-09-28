@@ -6,13 +6,19 @@ public class Boundary {
 	public float xMin, xMax, zMin, zMax;
 }
 
+[System.Serializable]
+public class Stats {
+	public int armor;
+}
+
 public class PlayerController : MonoBehaviour {
 
-	public Rigidbody rigidbody;
+	public Rigidbody rigbody;
 	public float speed;
 	public float tilt;
 	public Boundary boundary;
-
+	public Stats stats;
+	
 	public GameObject shot;
 	public Transform shotSpawn;
 	public float fireRate;
@@ -25,7 +31,7 @@ public class PlayerController : MonoBehaviour {
 
 	void Start () {
 		sound = GetComponent<AudioSource> ();
-		CalibrateAccelerometer ();
+		//CalibrateAccelerometer ();
 	}
 
 	void Update () {
@@ -42,7 +48,7 @@ public class PlayerController : MonoBehaviour {
  	void FixedUpdate () {
 		// The Vector3 movement is overwritten once each update by a platform dependant code block
 		Vector3 movement;
-		//if (Application.platform == RuntimePlatform.IPhonePlayer) {
+		if (Application.platform == RuntimePlatform.IPhonePlayer) {
 			Vector2 direction = touchPad.GetDirection ();
 			movement = new Vector3(direction.x, 0.0f, direction.y); 
 
@@ -51,22 +57,22 @@ public class PlayerController : MonoBehaviour {
 			//		Vector3 acceleration = FixAccelleration (accelerationRaw);
 			//		Vector3 movement = new Vector3(acceleration.x, 0.0f, acceleration.y); 
 
-//		} else {
-//			float moveHorizontal = Input.GetAxis ("Horizontal");
-//			float moveVertical = Input.GetAxis ("Vertical");
-//			
-//			movement = new Vector3 (moveHorizontal, 0.0f, moveVertical);
-//		}
+		} else {
+			float moveHorizontal = Input.GetAxis ("Horizontal");
+			float moveVertical = Input.GetAxis ("Vertical");
+			
+			movement = new Vector3 (moveHorizontal, 0.0f, moveVertical);
+		}
 
-		rigidbody.velocity = movement * speed;
-		rigidbody.position = new Vector3 
+		rigbody.velocity = movement * speed;
+		rigbody.position = new Vector3 
 			(
-				Mathf.Clamp (rigidbody.position.x, boundary.xMin, boundary.xMax), 
+				Mathf.Clamp (rigbody.position.x, boundary.xMin, boundary.xMax), 
 				0.0f, 
-				Mathf.Clamp (rigidbody.position.z, boundary.zMin, boundary.zMax)
+				Mathf.Clamp (rigbody.position.z, boundary.zMin, boundary.zMax)
 				);
 		
-		rigidbody.rotation = Quaternion.Euler (0.0f, 0.0f, rigidbody.velocity.x * -tilt);
+		rigbody.rotation = Quaternion.Euler (0.0f, 0.0f, rigbody.velocity.x * -tilt);
 	}
 
 	void CalibrateAccelerometer () {
@@ -78,6 +84,14 @@ public class PlayerController : MonoBehaviour {
 	Vector3 FixAcceleration (Vector3 acceleration) {
 		Vector3 fixedAcceleration = calibrationQuaternion * acceleration;
 		return fixedAcceleration;
+	}
+
+	public void Damage (int damageAmount) {
+		if (stats.armor - damageAmount < 0) {
+			stats.armor = 0;
+		} else {
+			stats.armor = stats.armor - damageAmount;
+		}
 	}
 
 }

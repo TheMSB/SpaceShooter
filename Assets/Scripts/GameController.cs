@@ -12,15 +12,19 @@ public class GameController : MonoBehaviour {
 	public float waveWait;
 
 	public Text scoreText;
+	public Text armorText;
 	//public Text restartText;
 	public Text gameOverText;
 	public GameObject restartButton;
+	public GameObject player;
 
 	private bool gameOver;
 	private bool restart;
 	private int score;
+	private PlayerController playerController;
 
 	void Start () {
+		playerController = player.GetComponent <PlayerController> ();
 		gameOver = false;
 		restart = false;
 //		restartText.text = "";
@@ -28,6 +32,7 @@ public class GameController : MonoBehaviour {
 		gameOverText.text = "";
 		score = 0;
 		UpdateScore ();
+		UpdateArmor ();
 		StartCoroutine (SpawnWaves ());
 	}
 
@@ -67,6 +72,10 @@ public class GameController : MonoBehaviour {
 	}
 	void UpdateScore () {
 		scoreText.text = "Score: " + score;
+	}
+
+	public void UpdateArmor () {
+		armorText.text = "Armor: " + playerController.stats.armor;
 	}
 
 	public void GameOver () {
