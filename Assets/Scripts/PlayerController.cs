@@ -31,13 +31,11 @@ public class PlayerController : MonoBehaviour {
 
 	void Start () {
 		sound = GetComponent<AudioSource> ();
-		//CalibrateAccelerometer ();
 	}
 
 	void Update () {
 		if (Time.time > nextFire) {
 			if (areaButton.CanFire ()) {
-			//if (areaButton.CanFire () || (Application.platform != RuntimePlatform.IPhonePlayer && Input.GetButton("Fire1"))) {
 				nextFire = Time.time + fireRate;
 				Instantiate(shot, shotSpawn.position, shotSpawn.rotation) ;
 				sound.Play();
@@ -51,12 +49,6 @@ public class PlayerController : MonoBehaviour {
 		if (Application.platform == RuntimePlatform.IPhonePlayer) {
 			Vector2 direction = touchPad.GetDirection ();
 			movement = new Vector3(direction.x, 0.0f, direction.y); 
-
-			//		Iphone input scheme using the accelerometer
-			//		Vector3 accelerationRaw = Input.acceleration;
-			//		Vector3 acceleration = FixAccelleration (accelerationRaw);
-			//		Vector3 movement = new Vector3(acceleration.x, 0.0f, acceleration.y); 
-
 		} else {
 			float moveHorizontal = Input.GetAxis ("Horizontal");
 			float moveVertical = Input.GetAxis ("Vertical");
@@ -73,12 +65,6 @@ public class PlayerController : MonoBehaviour {
 				);
 		
 		rigbody.rotation = Quaternion.Euler (0.0f, 0.0f, rigbody.velocity.x * -tilt);
-	}
-
-	void CalibrateAccelerometer () {
-		Vector3 accelerationSnapshot = Input.acceleration;
-		Quaternion rotateQuaternion = Quaternion.FromToRotation (new Vector3 (0.0f, 0.0f, -1.0f), accelerationSnapshot);
-		calibrationQuaternion = Quaternion.Inverse (rotateQuaternion);
 	}
 
 	Vector3 FixAcceleration (Vector3 acceleration) {
