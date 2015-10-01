@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour {
 		if (Time.time > nextFire) {
 			if (areaButton.CanFire ()) {
 				nextFire = Time.time + fireRate;
-				Instantiate(shot, shotSpawn.position, shotSpawn.rotation) ;
+				Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
 				sound.Play();
 			}
 		}
@@ -65,11 +65,6 @@ public class PlayerController : MonoBehaviour {
 				);
 		
 		rigbody.rotation = Quaternion.Euler (0.0f, 0.0f, rigbody.velocity.x * -tilt);
-	}
-
-	Vector3 FixAcceleration (Vector3 acceleration) {
-		Vector3 fixedAcceleration = calibrationQuaternion * acceleration;
-		return fixedAcceleration;
 	}
 
 	public void Damage (int damageAmount) {
