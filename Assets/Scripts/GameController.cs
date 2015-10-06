@@ -13,21 +13,18 @@ public class GameController : MonoBehaviour {
 
 	public Text scoreText;
 	public Text armorText;
-	//public Text restartText;
+
 	public Text gameOverText;
 	public GameObject restartButton;
 	public GameObject player;
 
 	private bool gameOver;
-	private bool restart;
 	private int score;
 	private PlayerController playerController;
 
 	void Start () {
 		playerController = player.GetComponent <PlayerController> ();
 		gameOver = false;
-		restart = false;
-//		restartText.text = "";
 		restartButton.SetActive (false);
 		gameOverText.text = "";
 		score = 0;
@@ -35,14 +32,6 @@ public class GameController : MonoBehaviour {
 		UpdateArmor ();
 		StartCoroutine (SpawnWaves ());
 	}
-
-//	void Update () {
-//		if (restart) {
-//			if (Input.GetKeyDown (KeyCode.R)) {
-//				Application.LoadLevel (Application.loadedLevel);
-//			}
-//		}
-//	}
 
 	IEnumerator SpawnWaves () {
 		yield return new WaitForSeconds (startWait);
@@ -58,9 +47,7 @@ public class GameController : MonoBehaviour {
 			yield return new WaitForSeconds (waveWait);
 
 			if (gameOver) {
-				//restartText.text = "Press 'R' for restart";
 				restartButton.SetActive (true);
-				restart = true;
 				break;
 			}
 		}
