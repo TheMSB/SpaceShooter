@@ -5,6 +5,7 @@ using System.Collections;
 public class GameController : MonoBehaviour {
 
 	public GameObject[] hazards;
+	public GameObject[] bombers;
 	public Vector3 spawnValues;
 	public int hazardCount;
 	public float spawnWait;
@@ -31,6 +32,7 @@ public class GameController : MonoBehaviour {
 		UpdateScore ();
 		UpdateArmor ();
 		StartCoroutine (SpawnWaves ());
+		StartCoroutine (SpawnBombers ());
 	}
 
 	IEnumerator SpawnWaves () {
@@ -52,6 +54,28 @@ public class GameController : MonoBehaviour {
 			}
 		}
 	}
+
+	IEnumerator SpawnBombers () {
+		yield return new WaitForSeconds (startWait*7);
+		
+		while (true) {
+			float lor = Mathf.Round(Random.value);
+			float spawnX = -6.0f;
+			if (lor == 1.0f) {
+				spawnX = 6.0f;
+			} else {
+				spawnX = -6.0f;
+			}
+			for (int i = 0; i < 5; i++) {		
+				Vector3 spawnPosition = new Vector3 (spawnX, spawnValues.y, spawnValues.z);
+				Quaternion spawnRotation = Quaternion.identity;
+				Instantiate (bombers[Random.Range(0,bombers.Length)], spawnPosition, spawnRotation);
+				yield return new WaitForSeconds (spawnWait);
+			}
+			yield return new WaitForSeconds (waveWait * 1.5f);
+		}
+	}
+
 
 	public void AddScore (int newScoreValue) {
 		score += newScoreValue;
