@@ -9,6 +9,7 @@ public class Boundary {
 [System.Serializable]
 public class Stats {
 	public int armor;
+	public int maxArmor;
 }
 
 public class PlayerController : MonoBehaviour {
@@ -21,23 +22,38 @@ public class PlayerController : MonoBehaviour {
 	
 	public GameObject shot;
 	public Transform shotSpawn;
+	public Transform shotSpawnDoubleLeft;
+	public Transform shotSpawnDoubleRight;
 	public float fireRate;
 	public SimpleTouchPad touchPad;
 	public SimpleTouchAreaButton areaButton;
 
 	private float nextFire;
+	private int powerLevel;
 	private Quaternion calibrationQuaternion;
 	private AudioSource sound;
 
 	void Start () {
 		sound = GetComponent<AudioSource> ();
+		powerLevel = 0;
 	}
 
 	void Update () {
 		if (Time.time > nextFire) {
 			if (areaButton.CanFire ()) {
 				nextFire = Time.time + fireRate;
-				Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
+				switch (powerLevel) {	
+					case 1: {
+						Instantiate(shot, shotSpawnDoubleLeft.position, shotSpawn.rotation);
+						Instantiate(shot, shotSpawnDoubleRight.position, shotSpawn.rotation);
+						break;
+					}
+					default: {
+						Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
+						break;
+					}
+
+				}
 				sound.Play();
 			}
 		}
@@ -75,4 +91,15 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
+	public void Heal (int healAmount) {
+		if (stats.armor + healAmount <= stats.maxArmor) {
+			stats.armor += healAmount;
+		} else {
+			stats.armor = stats.maxArmor;
+		}
+	}
+
+	public void setWeapon(int i) {
+		powerLevel = i;
+	}
 }
