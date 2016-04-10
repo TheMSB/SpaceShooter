@@ -19,13 +19,13 @@ public class Powerup : MonoBehaviour {
 	void OnTriggerEnter(Collider other) 
 	{
 		if (other.tag == "Player") {
+			Destroy(gameObject);
 			PlayerController player = other.gameObject.GetComponent <PlayerController> ();
 			player.Heal (healValue);
-			player.setWeapon(1);
+			player.levelUp ();
 			gameController.UpdateArmor ();
 			gameController.AddScore (scoreValue);
 
-			Destroy(gameObject);
 		}
 	}
 }

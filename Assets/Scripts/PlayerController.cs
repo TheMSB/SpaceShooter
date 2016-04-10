@@ -6,19 +6,12 @@ public class Boundary {
 	public float xMin, xMax, zMin, zMax;
 }
 
-[System.Serializable]
-public class Stats {
-	public int armor;
-	public int maxArmor;
-}
-
-public class PlayerController : MonoBehaviour {
+public class PlayerController : UnitController {
 
 	public Rigidbody rigbody;
 	public float speed;
 	public float tilt;
 	public Boundary boundary;
-	public Stats stats;
 	
 	public GameObject shot;
 	public Transform shotSpawn;
@@ -83,23 +76,9 @@ public class PlayerController : MonoBehaviour {
 		rigbody.rotation = Quaternion.Euler (0.0f, 0.0f, rigbody.velocity.x * -tilt);
 	}
 
-	public void Damage (int damageAmount) {
-		if (stats.armor - damageAmount < 0) {
-			stats.armor = 0;
-		} else {
-			stats.armor = stats.armor - damageAmount;
+	public void levelUp() {
+		if (powerLevel < 1) {
+			powerLevel++;
 		}
-	}
-
-	public void Heal (int healAmount) {
-		if (stats.armor + healAmount <= stats.maxArmor) {
-			stats.armor += healAmount;
-		} else {
-			stats.armor = stats.maxArmor;
-		}
-	}
-
-	public void setWeapon(int i) {
-		powerLevel = i;
 	}
 }
