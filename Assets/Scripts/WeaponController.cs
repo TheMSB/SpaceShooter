@@ -18,6 +18,9 @@ public class WeaponController : MonoBehaviour {
 		muzzle = shotSpawn.GetComponent<ParticleSystem> ();
 	}
 
+	/**
+	 * Fire our weapon
+	 */
 	void Fire() {
 		// If we have a muzzle flash made for us then use it
 		if (muzzle != null) {

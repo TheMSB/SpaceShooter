@@ -4,8 +4,10 @@ using System.Collections;
 public class DestroyByContact : MonoBehaviour {
 
 	public GameObject explosion;
+	public GameObject enemyExplosion;
 	public GameObject playerExplosion;
 	public int scoreValue;
+	public int impactDamage;
 	private GameController gameController;
 
 	private Transform trans;
@@ -27,10 +29,9 @@ public class DestroyByContact : MonoBehaviour {
 			if (explosion != null) {
 				Instantiate(explosion, trans.position, trans.rotation);
 			}
-
 			if (other.tag == "Player"){
 				PlayerController player = other.gameObject.GetComponent <PlayerController> ();
-				player.Damage(30);
+				player.Damage(impactDamage);
 				gameController.UpdateArmor();
 
 				if (player.stats.armor == 0){
@@ -42,8 +43,24 @@ public class DestroyByContact : MonoBehaviour {
 				Destroy(other.gameObject);
 			}
 
-			gameController.AddScore(scoreValue);
-			Destroy(gameObject);
+			if (this.tag == "Enemy") {
+				EnemyController enemy = this.gameObject.GetComponent <EnemyController> ();
+				PlayerController player = other.gameObject.GetComponent <PlayerController> ();
+				if (enemy != null) {
+					enemy.Damage (10);
+					Instantiate (enemyExplosion, this.transform.position, this.transform.rotation);
+					if (enemy.stats.armor == 0) {
+						Instantiate (enemyExplosion, this.transform.position, this.transform.rotation);
+						Destroy (gameObject);
+						gameController.AddScore (scoreValue);
+					}
+				} else {
+					Destroy (gameObject);
+					gameController.AddScore (scoreValue);
+				}
+			} else {
+				Destroy(gameObject);
+			}
 		}
 	}
 }

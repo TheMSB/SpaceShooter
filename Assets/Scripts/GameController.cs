@@ -43,7 +43,21 @@ public class GameController : MonoBehaviour {
 
 				Vector3 spawnPosition = new Vector3 (Random.Range (-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
 				Quaternion spawnRotation = Quaternion.identity;
-				Instantiate (hazards[Random.Range(0,hazards.Length)], spawnPosition, spawnRotation);
+				var spawn = hazards [Random.Range (0, hazards.Length)];
+
+				//We don't want Trident type enemies appearing too early in the game
+				if (score < 1000) {
+					while (spawn.name.Equals("Trident")) {
+						spawn = hazards [Random.Range (0, hazards.Length)];
+					}
+				}
+				if (playerController.stats.armor > 30) {
+					while (spawn.name.Equals("Powerup")) {
+						spawn = hazards [Random.Range (0, hazards.Length)];
+					}
+				}
+			
+				Instantiate (spawn, spawnPosition, spawnRotation);
 				yield return new WaitForSeconds (spawnWait);
 			}
 			yield return new WaitForSeconds (waveWait);
@@ -57,6 +71,7 @@ public class GameController : MonoBehaviour {
 
 	IEnumerator SpawnBombers () {
 		yield return new WaitForSeconds (startWait*7);
+		yield return new WaitUntil (() => score > 500);
 		
 		while (true) {
 			float lor = Mathf.Round(Random.value);
@@ -73,6 +88,10 @@ public class GameController : MonoBehaviour {
 				yield return new WaitForSeconds (spawnWait);
 			}
 			yield return new WaitForSeconds (waveWait * 1.5f);
+
+			if (gameOver) {
+				break;
+			}
 		}
 	}
 
