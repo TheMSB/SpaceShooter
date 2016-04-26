@@ -3,18 +3,21 @@ using System.Collections;
 
 [RequireComponent(typeof(LineRenderer))]
 
+/**
+ * A specialized weapon type that shoots uninterupted laser beams.
+ */
 public class RayGun : WeaponController 
 {
 	RaycastHit hit;
-	public float range = 300.0f;
-	LineRenderer line;
-	public Material lineMaterial;
+	public float range = 300.0f;	//Maximum laser range
+	LineRenderer line;				//The line we draw along the raycast
+	public Material lineMaterial;	//The material we use to draw the line
 
-	public GameObject hitEffect;
-	public GameObject playerExplosion;
-	private GameController gameController;
+	public GameObject hitEffect;			//Impact effect reference
+	public GameObject playerExplosion;		//The explosion displayed when we destroy the player
+	private GameController gameController;	//Reference to our gamecontroller
 
-	private bool firing;
+	private bool firing;			//Check if we are currently firing
 
 	void Start()
 	{
@@ -46,6 +49,7 @@ public class RayGun : WeaponController
 			line.SetPosition (1, new Vector3(transform.position.x, transform.position.y, hit.point.z - hit.normal.z));
 			Instantiate(hitEffect, hit.transform.position, hit.transform.rotation);
 
+			//Inflict 5 damage for each second that we hit the player
 			if(hit.collider.tag.Equals("Player")) {
 				PlayerController player = hit.collider.gameObject.GetComponent <PlayerController> ();
 				player.Damage(5);
