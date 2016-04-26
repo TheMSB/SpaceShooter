@@ -43,7 +43,7 @@ public class PlayerController : UnitController {
 		if (Time.time > nextFire) {
 			if (areaButton.CanFire ()) {
 				nextFire = Time.time + fireRate;
-
+				FireWeapon ();
 			}
 		}
 	}
@@ -85,7 +85,7 @@ public class PlayerController : UnitController {
 	/**
 	 * Fires the current player weapon regardless of cooldowns.
 	 */
-	private void FireWeapon () {
+	void FireWeapon () {
 		//Check which weapon we need to fire.
 		switch (powerLevel) {	
 		case 1:
