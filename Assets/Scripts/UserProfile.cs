@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 /**
  * The UserProfile class is responsible for handeling all scene and
@@ -36,6 +37,21 @@ public class UserProfile : MonoBehaviour {
 		PlayerPrefs.SetFloat ("musicVolume", value);
 	}
 
+	public void AddScore(int score) {
+		List<int> scores = new List<int> ();
+		for (int i = 1; i < 6; i++) {
+			scores.Add (PlayerPrefs.GetInt ("score" + i));
+		}
+		scores.Add (score);
+		scores.Sort();
+		scores.Reverse ();
+
+		for (int i = 0; i < 5; i++) {
+			Debug.Log ("adding score " + (i + 1) + " : " + scores [i]);
+			PlayerPrefs.SetInt ("score" + (i+1), scores[i]);
+		}
+	}
+
 	public string GetName () {
 		return PlayerPrefs.GetString ("name");
 	}
@@ -46,5 +62,15 @@ public class UserProfile : MonoBehaviour {
 
 	public float GetMusicVolume () {
 		return PlayerPrefs.GetFloat ("musicVolume");
+	}
+
+	public List<int> GetScores () {
+		List<int> scores = new List<int>();
+
+		for (int i = 1; i < 6; i++) {
+			scores.Add (PlayerPrefs.GetInt ("score" + i));
+		}
+
+		return scores;
 	}
 }
