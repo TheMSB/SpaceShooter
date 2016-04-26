@@ -57,14 +57,16 @@ public class GameController : MonoBehaviour {
 				Quaternion spawnRotation = Quaternion.identity;
 				var spawn = hazards [Random.Range (0, hazards.Length)];
 
-				//We don't want Trident type enemies appearing too early in the game
-				if (score < 1000) {
-					while (spawn.name.Equals("Trident")) {
+				//Only spawn powerups when the player is in trouble
+				if (playerController.stats.armor > 30) {
+					while (spawn.name.Equals("Powerup")) {
 						spawn = hazards [Random.Range (0, hazards.Length)];
 					}
 				}
-				if (playerController.stats.armor > 30) {
-					while (spawn.name.Equals("Powerup")) {
+
+				//We don't want Trident type enemies appearing too early in the game
+				if (score < 1000) {
+					while (spawn.name.Equals("Trident") || spawn.name.Equals("Powerup")) {
 						spawn = hazards [Random.Range (0, hazards.Length)];
 					}
 				}
