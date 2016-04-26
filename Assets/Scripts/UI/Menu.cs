@@ -1,11 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/**
+ * Basic menu controller for animated menus.
+ */
 public class Menu : MonoBehaviour {
 
 	private Animator _animator;
 	private CanvasGroup _canvasGroup;
 
+	/** Check if this menu is open. */
 	public bool isOpen {
 		get { return _animator.GetBool ("IsOpen"); }
 		set { _animator.SetBool ("IsOpen", value); }

@@ -4,13 +4,13 @@ using System.Collections;
 
 public class OptionsMenu : Menu {
 
-	public UserProfile profile;
-	public InputField nameField;
-	public Slider musicValue;
-	public Slider effectValue;
+	public UserProfile profile;		//Reference to our UserProfile
+	public InputField nameField;	//Reference to the name input field
+	public Slider musicValue;		//Slider that controls the music volume
+	public Slider effectValue;		//Slider that controls the effect volume
 
-	// Use this for initialization
 	void Start () {
+		//If any values have already been set then display them as such.
 		if (profile.GetName () != null) {
 			nameField.text = profile.GetName();
 		}
