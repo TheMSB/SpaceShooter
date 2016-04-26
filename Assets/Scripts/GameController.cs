@@ -17,16 +17,20 @@ public class GameController : MonoBehaviour {
 
 	public Text gameOverText;
 	public GameObject restartButton;
+	public GameObject menuButton;
 	public GameObject player;
 
 	private bool gameOver;
 	private int score;
 	private PlayerController playerController;
 
+	public UserProfile profile;
+
 	void Start () {
 		playerController = player.GetComponent <PlayerController> ();
 		gameOver = false;
 		restartButton.SetActive (false);
+		menuButton.SetActive (false);
 		gameOverText.text = "";
 		score = 0;
 		UpdateScore ();
@@ -64,6 +68,7 @@ public class GameController : MonoBehaviour {
 
 			if (gameOver) {
 				restartButton.SetActive (true);
+				menuButton.SetActive (true);
 				break;
 			}
 		}
@@ -110,10 +115,18 @@ public class GameController : MonoBehaviour {
 
 	public void GameOver () {
 		gameOverText.text = "Game Over!";
+		profile.AddScore (score);
+		Debug.Log ("added the score: " + score);
 		gameOver = true;
 	}
 
 	public void RestartGame () {
 		Application.LoadLevel (Application.loadedLevel);
 	}
+
+	public void ReturnMenu () {
+		Application.LoadLevel (0);
+	}
+
+
 }
